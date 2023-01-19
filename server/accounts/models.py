@@ -38,7 +38,6 @@ class MyAccountManager(BaseUserManager):
         user.is_active  = True
         user.is_staff   = True
         user.is_superadmin  = True
-        user.is_client=False
         user.save(using=self._db)
         return user
 
@@ -57,15 +56,11 @@ class Accounts(AbstractBaseUser):
     is_staff        = models.BooleanField(default=False)
     is_active       = models.BooleanField(default=True)
     is_superadmin   = models.BooleanField(default=False) 
-    is_institiute   = models.BooleanField(default=False) 
+    is_institute   = models.BooleanField(default=False) 
 
 
 
 
-    # -------------------------------------------------------------------------------------------------------------------- #
-    #                                        username will be a credential to login,
-    #    we cant change it by providing email field instead of username and then add username in required fields and remove email the same#
-    # -------------------------------------------------------------------------------------------------------------------- #
 
     USERNAME_FIELD      = 'email'
     REQUIRED_FIELDS     = ['username', 'first_name', 'last_name']
