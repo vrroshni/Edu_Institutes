@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 
 
 const INITIAL_STATE = {
-  user: localStorage.getItem("user") ? jwt_decode(localStorage.getItem("user")) : null,
+  user: localStorage.getItem("user") ? localStorage.getItem("user") : null,
   authtokens: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null,
   isLoading: false,
   isRegisterd: false,
@@ -27,7 +27,7 @@ const authSlice = createSlice({
     },
     [login.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.user = payload;
+      state.user = jwt_decode(payload.access);
       state.isLoggedIn = true;
       state.authtokens = payload;
     },

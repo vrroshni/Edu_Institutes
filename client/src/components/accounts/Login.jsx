@@ -16,6 +16,7 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onChange"
     });
+    
     const registerOptions = {
         email: {
             required: "Email is required",
@@ -41,7 +42,7 @@ const Login = () => {
     useEffect(() => {
 
         if (isLoggedIn)
-            if (user?.is_institiute)
+            if (user?.is_institute)
                 Navigate('/institutes')
             else
                 Navigate('/')

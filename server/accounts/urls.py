@@ -9,14 +9,14 @@ from rest_framework_simplejwt.views import (
 
 
 urlpatterns = [
-    path('',views.index),
     path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('register/', register_user, name='register'),
+    
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
-    
-    path('register/', registerUser, name='register'),
-    
-    
-    
+    path('profile/',views.get_user_profile,name='getuserprofile'),
+    path('editprofile/', edit_user_profile, name='editprofile'),
 
+
+    
 ]

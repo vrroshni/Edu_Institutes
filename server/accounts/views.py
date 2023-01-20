@@ -1,12 +1,15 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, IsAdminUser  # staff status true
+from django.contrib.auth.hashers import make_password
+
 
 
 from .models import Accounts
-
+from .serializers import ProfileSerializer,UpdateProfileSerializer
 
 
 
@@ -16,9 +19,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         # Add custom claims
+        
         token['username'] = user.username
         token['is_institute'] = user.is_institute
-        # ...
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['pro_pic'] = user.pro_pic
+        token['email'] = user.email
 
         return token
 
@@ -26,9 +33,8 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
     
 @api_view(['POST'])
-def registerUser(request):
+def register_user(request):
     data = request.data
-    print(data,'dddddddddddddd')
     try:
         username_exists = Accounts.objects.filter(username=data['username']).exists()
         email_exists = Accounts.objects.filter(email=data['email']).exists()
@@ -53,5 +59,59 @@ def registerUser(request):
     
     
 @api_view(['GET'])
-def index(request):
-    return Response("hello")
+@permission_classes([IsAuthenticated])
+def get_user_profile(request):
+    user = request.user
+    serializer = ProfileSerializer(user, many=False)
+    return Response(serializer.data)
+
+
+
+
+
+# @api_view(['PATCH'])
+# @permission_classes([IsAuthenticated])
+# def editUserProfile(request):
+#     try:
+#         user = request.user
+#         data = request.data
+#         if Accounts.objects.exclude(id=user.id).filter(username=data['username']).exists():
+#             message = {'detail': 'User with this username already exists'}
+#             return Response(message, status=status.HTTP_400_BAD_REQUEST)
+#         if Accounts.objects.exclude(id=user.id).filter(email=data['email']).exists():
+#             message = {'detail': 'User with this email already exists'}
+#             return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+#         user.first_name = data['firstname']
+#         user.last_name = data['lastname']
+#         user.username = data['username']
+#         user.email = data['email']
+#         if data['password'] != '':
+#             user.password = make_password(data['password'])
+#         if data['pro_pic'] != '':
+#             user.pro_pic = data['pro_pic']
+#         user.save()
+#         serializer = ProfileSerializer(user, many=False)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     except Exception:
+#         message = {'detail': "Something went wrong"}
+#         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def edit_user_profile(request):
+    user = request.user
+    data = request.data
+    if Accounts.objects.exclude(id=user.id).filter(username=data['username']).exists():
+            message = {'detail': 'User with this username already exists'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    if Accounts.objects.exclude(id=user.id).filter(email=data['email']).exists():
+            message = {'detail': 'User with this email already exists'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    serializer = ProfileSerializer(user, data=data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

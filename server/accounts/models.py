@@ -84,3 +84,18 @@ def updateUserDetails(sender,instance,**kwargs):
     if not user.full_name:
         user.full_name = f'{user.first_name} {user.last_name}'
 pre_save.connect(updateUserDetails,sender=Accounts)
+
+
+
+
+
+class InstitutionDetails(models.Model):
+    institute=models.ForeignKey(Accounts,related_name='account',on_delete=models.CASCADE,null=True)
+    found_on=models.DateField(auto_now_add=True,null=True)
+    location=models.CharField(max_length=50,null=True)
+    description=models.CharField(max_length=1500,null=True)
+    website=models.CharField(max_length=50,null=True)
+    about_video=models.FileField(upload_to='about_video',null=True)
+
+    def __str__(self):
+        return self.institute.full_name
