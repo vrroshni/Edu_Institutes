@@ -15,7 +15,7 @@ export const login = createAsyncThunk("auth/login", async (credentials, { reject
       { 'email': credentials.email, 'password': credentials.password }, config
     )
     toast.success("You are Successfully Logged in");
-    localStorage.setItem('user', JSON.stringify(data))
+    localStorage.setItem("authTokens", JSON.stringify(data));
     return data;
 
   } catch (err) {
@@ -23,7 +23,6 @@ export const login = createAsyncThunk("auth/login", async (credentials, { reject
       err.response.data.detail : err.message
     toast.error(error);
     return rejectWithValue(error)
-
 
   }
 })

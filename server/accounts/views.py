@@ -24,7 +24,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['is_institute'] = user.is_institute
         token['first_name'] = user.first_name
         token['last_name'] = user.last_name
-        token['pro_pic'] = user.pro_pic
+        token['full_name'] = user.full_name
         token['email'] = user.email
 
         return token
@@ -103,6 +103,7 @@ def get_user_profile(request):
 def edit_user_profile(request):
     user = request.user
     data = request.data
+    print(data,'fffffffffffffff')
     if Accounts.objects.exclude(id=user.id).filter(username=data['username']).exists():
             message = {'detail': 'User with this username already exists'}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)

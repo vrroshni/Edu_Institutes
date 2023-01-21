@@ -148,7 +148,7 @@ const SignUp = () => {
                                 </button>
                             </div>
                             <div className="text-center">
-                                <a className="right-0 inline-block text-sm font-light align-baseline text-500 hover:text-gray-800">
+                                <a onClick={()=>Navigate('/login')} className="right-0 inline-block text-sm font-light align-baseline text-500 cursor-pointer hover:text-white hover:scale-110 duration-300 ">
                                     Already have an account?
                                 </a>
                             </div>

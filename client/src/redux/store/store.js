@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../slices/auth'
-import profileReducer from '../slices/account'
+import instituteReducer from '../slices/institute'
+import profileReducer from '../slices/profile'
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        profile: profileReducer,
+        institute:instituteReducer,
+        profile:profileReducer,
+
     
     },
 })

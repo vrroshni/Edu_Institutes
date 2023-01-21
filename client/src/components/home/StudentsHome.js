@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SideBar from '../elements/SideBar'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getprofile } from '../../redux/services/profile'
+import axios from 'axios'
+import { institutesList } from "../../redux/slices/institute";
+import Loader from '../elements/Loader'
+import Institutetable from './tables/Institutetable'
+
 
 
 
@@ -10,45 +14,57 @@ const StudentsHome = () => {
 
   const dispatch = useDispatch()
   const Navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const { authtokens } = useSelector((state) => state.auth)
+  const { institutes } = useSelector((state) => state.institute)
 
-  
+
+  const fetchList = async () => {
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${authtokens?.access}`
+      }
+    }
+    const { data } = await axios.get('institutes/list', config)
+    dispatch(institutesList(data))
+    setLoading(false)
+  }
+  useEffect(() => {
+    setLoading(true)
+    fetchList()
+  }, [])
+
 
   return (
-
     <div className="antialiased bg-studenthome bg-cover w-full min-h-screen text-slate-300 relative py-4">
       <div className="grid grid-cols-12 mx-auto gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-14 max-w-7xl my-10 px-2">
         <SideBar />
-        <div id="content" className="bg-white/10 col-span-9 rounded-lg p-6">
-          <div id="last-users">
-            <h1 className="font-bold py-4 uppercase">Educational Institutes</h1>
-            <div className="overflow-x-auto">
-              <table className="w-full whitespace-nowrap">
-                <thead className="bg-black/60">
-                  <th className="text-left py-3 px-2 rounded-l-lg">Institute</th>
-                  <th className="text-left py-3 px-2">Email</th>
-                  <th className="text-left py-3 px-2 rounded-r-lg">View</th>
-                </thead>
-                <tr className="border-b border-gray-700 bg-black/25 hover:bg-black/100 transition duration-300  ease-linear rounded-lg">
-                  <td className="py-3 px-2 font-bold">
-                    <div className="inline-flex space-x-3 items-center">
-                      <span><img className="rounded-full w-8 h-8" src="https://images.generated.photos/tGiLEDiAbS6NdHAXAjCfpKoW05x2nq70NGmxjxzT5aU/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/OTM4ODM1LmpwZw.jpg" alt="" /></span>
-                      <span>Thai Mei</span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-2">thai.mei@abc.com</td>
-                  <td className="py-3 px-2">
-                    <div className="inline-flex items-center space-x-3">
-                      <a href="" title="Edit" className="hover:text-white">
-                        <button >View More Details</button>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
+        {loading ?
+        <div className='bg-white/10 col-span-9 rounded-lg p-6 text-center text-2xl font-bold text-white'>
+          <Loader /> 
+        </div>:
+          institutes.length != 0 ? <div id="content" className="bg-white/10 col-span-9 rounded-lg p-6">
+            <div id="last-users">
+              <h1 className="font-bold py-4 uppercase">Educational Institutes</h1>
+              <div className="overflow-x-auto">
+                <table className="w-full whitespace-nowrap">
+                  <thead className="bg-black/60">
+                    <th className="text-left py-3 px-2 rounded-l-lg">Institute</th>
+                    <th className="text-left py-3 px-2">Email</th>
+                    <th className="text-left py-3 px-2">Location</th>
+                    <th className="text-left py-3 px-2 rounded-r-lg">View</th>
+                  </thead>
+                  {institutes.map((institute)=>(
+                    <Institutetable data={institute}/>
+                  ))}
 
-        </div>
+                </table>
+              </div>
+            </div>
+          </div> : <h1 className='bg-white/10 col-span-9 rounded-lg p-6 text-center text-2xl font-bold text-white'>No Institutes Available</h1>
+
+        }
       </div>
     </div>
   )

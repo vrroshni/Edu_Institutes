@@ -81,8 +81,8 @@ class Accounts(AbstractBaseUser):
 
 def updateUserDetails(sender,instance,**kwargs):
     user=instance
-    if not user.full_name:
-        user.full_name = f'{user.first_name} {user.last_name}'
+    
+    user.full_name = f'{user.first_name} {user.last_name}'
 pre_save.connect(updateUserDetails,sender=Accounts)
 
 

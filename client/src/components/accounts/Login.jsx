@@ -16,7 +16,7 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onChange"
     });
-    
+
     const registerOptions = {
         email: {
             required: "Email is required",
@@ -40,13 +40,12 @@ const Login = () => {
     }
 
     useEffect(() => {
+        if (user) {
+            Navigate('/')
+        }
 
-        if (isLoggedIn)
-            if (user?.is_institute)
-                Navigate('/institutes')
-            else
-                Navigate('/')
-    }, [isLoggedIn])
+
+    }, [user])
 
 
     return (
@@ -86,7 +85,7 @@ const Login = () => {
                                 </button>
                             </div>
                             <div className="text-center">
-                                <a className="right-0 inline-block text-sm font-light align-baseline text-500 hover:text-gray-800">
+                                <a onClick={() => Navigate('/signup')} className="right-0 inline-block text-sm font-light align-baseline text-500 cursor-pointer hover:text-white hover:scale-110 duration-300  ">
                                     Create an account
                                 </a>
                             </div>

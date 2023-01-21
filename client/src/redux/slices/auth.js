@@ -4,8 +4,12 @@ import jwt_decode from "jwt-decode";
 
 
 const INITIAL_STATE = {
-  user: localStorage.getItem("user") ? localStorage.getItem("user") : null,
-  authtokens: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null,
+  user: window.localStorage.getItem("authTokens")
+    ? jwt_decode(window.localStorage.getItem("authTokens"))
+    : null,
+  authtokens: window.localStorage.getItem("authTokens")
+    ? JSON.parse(window.localStorage.getItem("authTokens"))
+    : null,
   isLoading: false,
   isRegisterd: false,
   isLoggedIn: false,
@@ -15,14 +19,20 @@ const authSlice = createSlice({
   name: "auth",
   initialState: INITIAL_STATE,
   reducers: {
-    updateToken: (state, action) => {
-      console.log("somethinggg");
+    updateToken: (state, { payload }) => {
+      console.log('its happeningggg update')
+      state.user = jwt_decode(payload.access)
+      state.authtokens = payload;
+    },
+    logout: (state, { payload }) => {
+      state.user = null
+      state.authtokens = null;
+      localStorage.removeItem("authTokens")
     },
   },
   extraReducers: {
 
     [login.pending]: (state, { payload }) => {
-      console.log('pendingggg')
       state.isLoading = true;
     },
     [login.fulfilled]: (state, { payload }) => {
@@ -52,5 +62,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { updateToken } = authSlice.actions;
+export const { updateToken,logout } = authSlice.actions;
 export default authSlice.reducer;
