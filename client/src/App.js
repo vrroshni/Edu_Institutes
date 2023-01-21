@@ -15,6 +15,7 @@ import { updateToken, logout } from './redux/slices/auth'
 import { useEffect, useState } from 'react';
 import Restricted from './pages/Restricted';
 import ForInstitute from './utils/ForInstitute';
+import NotFound from './pages/NotFound';
 // import ForStudents from './utils/ForStudents';
 
 function App() {
@@ -46,9 +47,9 @@ function App() {
     } catch (err) {
       logoutUser();
     }
-          // if (loading) {
-      //   setloading(false)
-      // }
+          if (loading) {
+        setLoading(false)
+      }
 
   };
 
@@ -56,9 +57,9 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      // if (loading) {
-      //   updateTokens()
-      // }
+      if (loading) {
+        updateTokens()
+      }
       let fourminutes = 1000 * 60 * 1440;
       let interval = setInterval(() => {
         if (authtokens) {
@@ -91,6 +92,7 @@ function App() {
 
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
+          <Route path='*' element={<NotFound />} />
 
         <Route path='/restricted' element={<Restricted />} />
 

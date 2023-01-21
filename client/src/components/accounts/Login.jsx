@@ -9,7 +9,7 @@ import Loader from '../elements/Loader';
 
 const Login = () => {
 
-    const { user, isLoggedIn, isLoading } = useSelector((state) => state.auth)
+    const { user,  isLoading } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
     const Navigate = useNavigate()
 
@@ -43,8 +43,7 @@ const Login = () => {
         if (user) {
             Navigate('/')
         }
-
-
+     
     }, [user])
 
 
