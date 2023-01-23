@@ -6,9 +6,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser  # staff sta
 from accounts.models import InstitutionDetails
 from accounts.serializers import ProfileSerializer
 from .serializers import InstituteSerializer,New_InstituteSerializer
+
 # Create your views here.
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def institutes_list(request):
@@ -26,14 +25,12 @@ def institute_info(request):
         serializer = InstituteSerializer(info)
         return Response(serializer.data)
     except Exception as e:
-        print(e,'errrrrrrrrrrr')
         return Response(status=status.HTTP_400_BAD_REQUEST)
         
         
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_institute_info(request):
-        print(request.data,'gggggggggggggggg')
         serializer = New_InstituteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -41,36 +38,7 @@ def add_institute_info(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def updateUserProfile(request):
-    try:
-        user = request.user
-        data = request.data
-        if Account.objects.exclude(id=user.id).filter(username=data['username']).exists():
-            message = {'detail': 'User with this username already exists'}
-            return Response(message, status=status.HTTP_400_BAD_REQUEST)
-        if Account.objects.exclude(id=user.id).filter(email=data['email']).exists():
-            message = {'detail': 'User with this email already exists'}
-            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
-        user.first_name = data['firstname']
-        user.last_name = data['lastname']
-        user.username = data['username']
-        user.email = data['email']
-        user.phone_number = data['phonenumber']
-        if data['password'] != '':
-            user.password = make_password(data['password'])
-        if data['pro_pic'] != '':
-            user.pro_pic = data['pro_pic']
-        if data['cover_pic'] != '':
-            user.cover_pic = data['cover_pic']
-        user.save()
-        serializer = ProfileSerializerWithToken(user, many=False)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    except Exception:
-        message = {'detail': "Something went wrong"}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PATCH'])
@@ -87,4 +55,6 @@ def edit_institute_info(request):
     institute.save()
     serializer = New_InstituteSerializer(institute,many=False)
     return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+
 

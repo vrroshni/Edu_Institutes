@@ -68,42 +68,11 @@ def get_user_profile(request):
 
 
 
-
-# @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
-# def editUserProfile(request):
-#     try:
-#         user = request.user
-#         data = request.data
-#         if Accounts.objects.exclude(id=user.id).filter(username=data['username']).exists():
-#             message = {'detail': 'User with this username already exists'}
-#             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-#         if Accounts.objects.exclude(id=user.id).filter(email=data['email']).exists():
-#             message = {'detail': 'User with this email already exists'}
-#             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-
-#         user.first_name = data['firstname']
-#         user.last_name = data['lastname']
-#         user.username = data['username']
-#         user.email = data['email']
-#         if data['password'] != '':
-#             user.password = make_password(data['password'])
-#         if data['pro_pic'] != '':
-#             user.pro_pic = data['pro_pic']
-#         user.save()
-#         serializer = ProfileSerializer(user, many=False)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     except Exception:
-#         message = {'detail': "Something went wrong"}
-#         return Response(message, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def edit_user_profile(request):
     user = request.user
     data = request.data
-    print(data,'fffffffffffffff')
     if Accounts.objects.exclude(id=user.id).filter(username=data['username']).exists():
             message = {'detail': 'User with this username already exists'}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)

@@ -8,8 +8,6 @@ function Description(props) {
 
     return (
 
-        <div className="antialiased bg-studenthome bg-cover w-full min-h-screen text-white relative py-4">
-            <div className="grid grid-cols-12 mx-auto gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-14 max-w-7xl my-10 px-2">
                 <div id="content" className="bg-white/10 col-span-12 rounded-lg p-6 flex justify-center">
                     <div class="p-6 shadow-lg">
                         <h2 class="text-white text-3xl font-bold mb-2"><u>{instituteinfo?.institute?.full_name}</u> </h2>
@@ -28,8 +26,6 @@ function Description(props) {
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
 
 
     )

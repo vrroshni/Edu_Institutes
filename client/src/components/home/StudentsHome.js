@@ -37,36 +37,33 @@ const StudentsHome = () => {
 
 
   return (
-    <div className="antialiased bg-studenthome bg-cover w-full min-h-screen text-slate-300 relative py-4">
-      <div className="grid grid-cols-12 mx-auto gap-2 sm:gap-4 md:gap-6 lg:gap-10 xl:gap-14 max-w-7xl my-10 px-2">
-        <SideBar />
-        {loading ?
+    <>
+      {loading ?
         <div className='bg-white/10 col-span-9 rounded-lg p-6 text-center text-2xl font-bold text-white'>
-          <Loader /> 
-        </div>:
-          institutes.length != 0 ? <div id="content" className="bg-white/10 col-span-9 rounded-lg p-6">
-            <div id="last-users">
-              <h1 className="font-bold py-4 uppercase">Educational Institutes</h1>
-              <div className="overflow-x-auto">
-                <table className="w-full whitespace-nowrap">
-                  <thead className="bg-black/60">
-                    <th className="text-left py-3 px-2 rounded-l-lg">Institute</th>
-                    <th className="text-left py-3 px-2">Email</th>
-                    <th className="text-left py-3 px-2">Location</th>
-                    <th className="text-left py-3 px-2 rounded-r-lg">View</th>
-                  </thead>
-                  {institutes.map((institute)=>(
-                    <Institutetable data={institute}/>
-                  ))}
+          <Loader />
+        </div> :
+        institutes.length !== 0 ? <div id="content" className="bg-white/10 col-span-9 rounded-lg p-6">
+          <div id="last-users">
+            <h1 className="font-bold py-4 uppercase">Educational Institutes</h1>
+            <div className="overflow-x-auto">
+              <table className="w-full whitespace-nowrap">
+                <thead className="bg-black/60">
+                  <th className="text-left py-3 px-2 rounded-l-lg">Institute</th>
+                  <th className="text-left py-3 px-2">Email</th>
+                  <th className="text-left py-3 px-2">Location</th>
+                  <th className="text-left py-3 px-2 rounded-r-lg">View</th>
+                </thead>
+                {institutes.map((institute) => (
+                  <Institutetable data={institute} />
+                ))}
 
-                </table>
-              </div>
+              </table>
             </div>
-          </div> : <h1 className='bg-white/10 col-span-9 rounded-lg p-6 text-center text-2xl font-bold text-white'>No Institutes Available</h1>
+          </div>
+        </div> : <h1 className='bg-white/10 col-span-9 rounded-lg p-6 text-center text-2xl font-bold text-white'>No Institutes Available</h1>
 
-        }
-      </div>
-    </div>
+      }
+    </>
   )
 }
 

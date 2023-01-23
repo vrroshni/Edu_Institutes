@@ -10,7 +10,7 @@ const SideBar = () => {
     const dispatch = useDispatch()
     const Navigate = useNavigate()
 
-    const { authtokens, user } = useSelector((state) => state.auth)
+    const { authtokens } = useSelector((state) => state.auth)
     const { profileinfo } = useSelector((state) => state.profile)
 
 
@@ -36,8 +36,12 @@ const SideBar = () => {
 
     useEffect(() => {
         const token = authtokens?.access
-        if (!profileinfo)
-            dispatch(profile({ token }))
+        if (!profileinfo) {
+            if (authtokens)
+            console.log('from here....')
+                dispatch(profile({ token }))
+
+        }
 
     }, [])
 

@@ -21,7 +21,6 @@ export const profile = createAsyncThunk("getprofile/profile", async (credentials
     } catch (err) {
       const error = err.response && err.response.data.detail ?
         err.response.data.detail : err.message
-      toast.error(error);
       return rejectWithValue(error)
   
     }
